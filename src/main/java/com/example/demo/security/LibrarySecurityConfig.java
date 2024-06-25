@@ -29,15 +29,26 @@
         return new BCryptPasswordEncoder();
      }
 
-   
      @Bean
       SecurityFilterChain librarySecurityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf(csrf -> csrf.disable())
+         http.csrf(csrf -> csrf.disable())
              .authorizeHttpRequests(requests -> requests
                  .requestMatchers(UN_SECURED_URLs).permitAll()  // Gli URL non sicuri sono accessibili a tutti
                  .requestMatchers(SECURED_URLs).hasAuthority("ADMIN")  // Gli URL sicuri richiedono il ruolo ADMIN
-                 .anyRequest().authenticated())  // Tutte le altre richieste richiedono autenticazione
-             .httpBasic(withDefaults()).build();
+                 .anyRequest().authenticated()  // Tutte le altre richieste richiedono autenticazione
+             )
+             .httpBasic(withDefaults());  // Usa l'autenticazione HTTP Basic
+         
+         return http.build();
      }
+//     @Bean
+//      SecurityFilterChain librarySecurityFilterChain(HttpSecurity http) throws Exception {
+//        return http.csrf(csrf -> csrf.disable())
+//             .authorizeHttpRequests(requests -> requests
+//                 .requestMatchers(UN_SECURED_URLs).permitAll()  // Gli URL non sicuri sono accessibili a tutti
+//                 .requestMatchers(SECURED_URLs).hasAuthority("ADMIN")  // Gli URL sicuri richiedono il ruolo ADMIN
+//                 .anyRequest().authenticated())  // Tutte le altre richieste richiedono autenticazione
+//             .httpBasic(withDefaults()).build();
+//     }
 
  }
